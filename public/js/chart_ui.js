@@ -1,17 +1,3 @@
-// const Chat = require('./chart');
-// function divEscapedContentElement(message) {
-//     return $('<div></div>').text(message)
-// }
-// function divSystemContentElement(message){
-//     return $('<div></div>').html('<i></i>')
-// }
-// let divEscapedContentElement = message =>{
-//     return $('<div></div>').text(message)
-// }
-// let divSystemContentElement = message => {
-//     return $('<div></div>').html('<i></i>');
-// }
-// var Chat = require("./chart");
 var chatroom = {
     chatmodel: {},
     socket:{},
@@ -30,7 +16,6 @@ var chatroom = {
         this.intervalNum = setInterval(function(){
             chatroom.socket.emit("rooms");
         },1000)
-        // this.checkchatrooms();
     },
     bindWork: function(){
         //绑定send按钮发送信息事件
@@ -49,7 +34,7 @@ var chatroom = {
     socketBind: function(){
         //监听房间变动的信息
         this.socket.on("rooms",function(rooms){
-            $("#room-list").empty();
+            $("#room-list").html('<div class="set_message"></div>');
             for(var room in rooms){
                 if(room != ''){
                     $("#room-list").append(`<div>${room}</div>`);
@@ -68,9 +53,15 @@ var chatroom = {
         })
         //监听聊天信息
         this.socket.on("message", function(result){
-            console.log(result);
+            // console.log(result);
+            if(result.setmessage){
+                $("#messages .set_message").html(result.text)
+            }else{
+                $("#messages").append(`<div>${result.text}</div>`)
+            }
         })
     },
+    //处理send按钮的方法
     handleSendBtn: function(){
         var msg = $("#send-message").val();
         if(msg.charAt(0) == "/"){
@@ -79,16 +70,6 @@ var chatroom = {
             chatroom.chatmodel.sendMessage(chatroom.room,msg);
         }
         $("#send-message").val('');
-    },
-    handleSendMessage: function(msg){
-
-        this.chatmodel.sendMessage()
-    },
-    handleSendCommand: function(){
-        
-    },
-    checkchatrooms: function(){
-        this.socket.emit("rooms");
     }
 }
 chatroom.init();
