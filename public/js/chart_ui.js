@@ -47,12 +47,10 @@ var chatroom = {
         chatroom.chatmodel.changeRoom($(this).text());
     },
     socketBind: function(){
+        //监听房间变动的信息
         this.socket.on("rooms",function(rooms){
-            // console.log(rooms)
             $("#room-list").empty();
             for(var room in rooms){
-                // $("#room-list").append(`<div>${}</div>`)
-                // room = room.substring(1,room.length);
                 if(room != ''){
                     $("#room-list").append(`<div>${room}</div>`);
                 }
@@ -60,23 +58,25 @@ var chatroom = {
         });
         //更改名字的结果
         this.socket.on("nameResult", function(result){
-            var message;
-            console.log(result)
+            $("#room_title .user_name").html(result.name);
+
         })
         //当加入新房间的时候监听的信息
         this.socket.on("joinResult", function(result){
-            // console.log(result)
-            $("#room_title").html(result.room);
-            // $("#messages").append(`<div>room changed</div>`)
+            $("#room_title .room_name").html(result.room);
+            chatroom.room = result.room;
+        })
+        //监听聊天信息
+        this.socket.on("message", function(result){
+            console.log(result);
         })
     },
     handleSendBtn: function(){
         var msg = $("#send-message").val();
         if(msg.charAt(0) == "/"){
-            console.log(msg)
             chatroom.chatmodel.processCommand(msg);
         }else{
-            chatroom.chatmodel.sendMessage(msg);
+            chatroom.chatmodel.sendMessage(chatroom.room,msg);
         }
         $("#send-message").val('');
     },
