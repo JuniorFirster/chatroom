@@ -24,6 +24,8 @@ var chatroom = {
         this.chatmodel = new Chat(this.socket);
         //绑定该绑定的socket事件
         this.socketBind();
+        //绑定页面Dom事件
+        this.bindWork();
         //定期轮询查看聊天室
         this.intervalNum = setInterval(function(){
             chatroom.socket.emit("rooms");
@@ -31,7 +33,11 @@ var chatroom = {
         // this.checkchatrooms();
     },
     bindWork: function(){
-        $("#send-button").on("click",this.handleSendBtn.bind(this));
+        $("#send-button").on("click",chatroom.handleSendBtn.bind(this));
+        $("#room-list").on("click", "div", chatroom.changeRoomBind)
+    },
+    changeRoomBind: function(){
+        chatroom.chatmodel.changeRoom($(this).text());
     },
     socketBind: function(){
         this.socket.on("rooms",function(rooms){
@@ -49,6 +55,10 @@ var chatroom = {
         this.socket.on("nameResult", function(result){
             var message;
 
+        })
+        //当加入新房间的时候监听的信息
+        this.socket.on("joinResult", function(result){
+            console.log(result)
         })
     },
     handleSendBtn: function(){
