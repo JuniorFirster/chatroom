@@ -33,7 +33,14 @@ var chatroom = {
         // this.checkchatrooms();
     },
     bindWork: function(){
+        //绑定send按钮发送信息事件
         $("#send-button").on("click",chatroom.handleSendBtn.bind(this));
+        //绑定回车发送信息事件
+        $(window).on("keyup",function(e){
+            if(e.keyCode == 13){
+                chatroom.handleSendBtn.apply(this);
+            }
+        })
         $("#room-list").on("click", "div", chatroom.changeRoomBind)
     },
     changeRoomBind: function(){
@@ -45,7 +52,7 @@ var chatroom = {
             $("#room-list").empty();
             for(var room in rooms){
                 // $("#room-list").append(`<div>${}</div>`)
-                room = room.substring(1,room.length);
+                // room = room.substring(1,room.length);
                 if(room != ''){
                     $("#room-list").append(`<div>${room}</div>`);
                 }
@@ -54,20 +61,24 @@ var chatroom = {
         //更改名字的结果
         this.socket.on("nameResult", function(result){
             var message;
-
+            console.log(result)
         })
         //当加入新房间的时候监听的信息
         this.socket.on("joinResult", function(result){
-            console.log(result)
+            // console.log(result)
+            $("#room_title").html(result.room);
+            // $("#messages").append(`<div>room changed</div>`)
         })
     },
     handleSendBtn: function(){
         var msg = $("#send-message").val();
         if(msg.charAt(0) == "/"){
-            this.handleSendCommand(msg)
+            console.log(msg)
+            chatroom.chatmodel.processCommand(msg);
         }else{
-            this.handleSendMessage(msg);
+            chatroom.chatmodel.sendMessage(msg);
         }
+        $("#send-message").val('');
     },
     handleSendMessage: function(msg){
 

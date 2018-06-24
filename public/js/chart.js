@@ -17,7 +17,7 @@ Chat.prototype.changeRoom = function(room){
 }
 //处理聊天命令
 Chat.prototype.processCommand = function(command){
-    let words = command.join(' ');
+    let words = command.split(' ');
     let message = false;    
     command = words[0].substring(1, words[0].length).toLowerCase();
     switch(command){
