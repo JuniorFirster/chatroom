@@ -1,0 +1,38 @@
+body{
+    padding: 50px;
+    font-size: 14px;
+}
+a{
+    color: #00b7ff;
+}
+#content{
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#room{
+    background-color: #ddd;
+    margin-bottom: 1em;
+}
+#room::after{
+    content:"";   
+    display:table;   
+    clear: both;
+
+}
+#messages{
+    width: 690px;
+    height: 300px;
+    overflow: auto;
+    background-color: #eee;
+    margin-bottom: 1em;
+    margin-right: 10px;
+    float: left
+}
+#room-list{
+    height: 300px;
+    background: #efefef;
+    border: 1px solid #000;
+    width: 500px;
+    float: left
+}
